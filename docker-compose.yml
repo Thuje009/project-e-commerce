@@ -1,15 +1,24 @@
 version: '3.8'
+
 services:
   nextjs:
     container_name: nextjs-ecommerce
-    image: node:18
+    image: node:18-alpine # Using alpine for smaller image size
     volumes:
-      - .:/My-Folder
-    working_dir: /My-Folder
+      - .:/app # More conventional directory name
+      - /app/node_modules # Volume for node_modules to improve performance
+    working_dir: /app
     ports:
-      - 3000:3000
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true # Enable hot reload in Docker
     command: >
-      bash -c "
-        npm install &&
-        npm run dev
-      "
+      sh -c "npm install && npm run dev"
+    # Use `sh` instead of `bash` since we're using alpine
+    restart: unless-stopped
+
+networks:
+  default:
+    name: nextjs-network
+    driver: bridge
