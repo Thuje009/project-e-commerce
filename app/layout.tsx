@@ -1,19 +1,23 @@
-import '@/styles/global.css'
-import Navtop from '@/components/shared/Navtop'
-
+import "@/styles/global.css";
+import { NextUIProvider } from "@nextui-org/react";
+import Navtop from "@/components/shared/Navtop";
+import Footer from "@/components/shared/Footer";
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body>
-        {/* Layout UI */}
-        <Navtop />
-        <main>{children}</main>
-      </body>
+      <NextUIProvider>
+        <body>
+          {/* Layout UI */}
+          <Navtop />
+          <main>{children}</main>
+          <Footer />
+        </body>
+      </NextUIProvider>
     </html>
-  )
+  );
 }
