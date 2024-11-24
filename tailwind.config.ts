@@ -22,6 +22,10 @@ const config: Config = {
         cardBackground: "var(--card-background)",
       },
     },
+         container: {
+        center: true,  
+        padding: '2rem',  
+      },
   },
   plugins: [],
 };

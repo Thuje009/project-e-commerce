@@ -41,3 +41,8 @@ body {
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
 }
+@layer components {
+  .container {
+    max-width: 1188px;
+  }
+}
