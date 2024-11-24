@@ -10,14 +10,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <NextUIProvider>
-        <body>
+      <body>
+        <NextUIProvider>
           {/* Layout UI */}
           <Navtop />
           <main>{children}</main>
           <Footer />
-        </body>
-      </NextUIProvider>
+        </NextUIProvider>
+      </body>
     </html>
   );
 }
