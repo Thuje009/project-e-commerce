@@ -8,9 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
+ colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        textPrimary: "var(--text-primary)",
+        textSecondary: "var(--text-secondary)",
+        textHighlight: "var(--text-highlight)",
+        buttonPrimary: "var(--button-primary)",
+        buttonPrimaryHover: "var(--button-primary-hover)",
+        buttonSecondary: "var(--button-secondary)",
+        buttonSecondaryHover: "var(--button-secondary-hover)",
+        border: "var(--border)",
+        cardBackground: "var(--card-background)",
       },
     },
   },

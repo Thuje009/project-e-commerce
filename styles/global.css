@@ -9,8 +9,24 @@
 }
 
 :root {
-    --background: #FAFAFA;
-    --foreground: #333333;
+    /* พื้นหลัง */
+    --background: #FAFAFA; /* สีพื้นหลังหลัก */
+    --foreground: #333333; /* สีข้อความหลัก */
+    
+    /* ตัวหนังสือ */
+    --text-primary: #333333; /* สีข้อความหลัก */
+    --text-secondary: #6C757D; /* สีข้อความรอง */
+    --text-highlight: #007BFF; /* สีข้อความไฮไลท์ */
+
+    /* ปุ่ม */
+    --button-primary: #FF7F50; /* สีปุ่มหลัก */
+    --button-primary-hover: #FF5733; /* สีปุ่มหลักเมื่อ hover */
+    --button-secondary: #28A745; /* สีปุ่มรอง */
+    --button-secondary-hover: #218838; /* สีปุ่มรองเมื่อ hover */
+
+    /* ขอบและพื้นหลังเพิ่มเติม */
+    --border: #E0E0E0; /* สีเส้นขอบ */
+    --card-background: #FFFFFF; /* สีพื้นหลังของการ์ดหรือกล่อง */
 }
 
 @media (prefers-color-scheme: dark) {
