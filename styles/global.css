@@ -43,6 +43,6 @@ body {
 }
 @layer components {
   .container {
-    max-width: 1188px;
+    max-width: 1200px;
   }
 }
