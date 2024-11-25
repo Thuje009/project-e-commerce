@@ -1,12 +1,12 @@
 import UserAccountPage from "@/components/userAccountPage/UserAccountPage";
 import React from "react";
 
-function page() {
+function page({ params }: { params: { page: string } }) {
   return (
     <>
-        <UserAccountPage/>
+      <UserAccountPage page={params.page} />
     </>
-  )
+  );
 }
 
 export default page;
