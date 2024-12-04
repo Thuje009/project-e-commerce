@@ -1,4 +1,4 @@
-import UserAccountPage from "@/components/userAccountPage/UserAccountPage";
+import UserAccountPage from "@/components/page/userAccount/UserAccountPage";
 import React from "react";
 
 function page({ params }: { params: { page: string } }) {

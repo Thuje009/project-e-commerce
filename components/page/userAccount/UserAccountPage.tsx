@@ -3,7 +3,7 @@ import React from "react";
 import UserProfile from "./UserProfile";
 import { Link, User } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import PurchasePage from "./PurchasePage";
+import PurchasePage from "./Purchase";
 import { UserCircle, ShoppingBag, Bell, ChevronRight } from "lucide-react";
 
 interface Props {
