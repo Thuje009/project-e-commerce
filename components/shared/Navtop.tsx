@@ -74,7 +74,7 @@ const Header = () => {
               <div>
                 <span
                   className={`py-2 px-2 transition-all duration-300 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent' border cursor-pointer`}
-                  onClick={() => router.push(`/user/accout`)}
+                  onClick={() => router.push(`/user/account`)}
                 >
                   Profile
                 </span>
