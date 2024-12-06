@@ -2,6 +2,7 @@ import "@/styles/global.css";
 import { NextUIProvider } from "@nextui-org/react";
 import Navtop from "@/components/shared/Navtop";
 import Footer from "@/components/shared/Footer";
+import { AuthProvider } from "../provider/authProvider";
 
 export default function RootLayout({
   children,
@@ -11,12 +12,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <NextUIProvider>
-          {/* Layout UI */}
-          <Navtop />
-          <main className="min-h-[calc(100vh-435px)]">{children}</main>
-          <Footer />
-        </NextUIProvider>
+        <AuthProvider>
+          <NextUIProvider>
+            {/* Layout UI */}
+            <Navtop />
+            <main className="min-h-[calc(100vh-435px)]">{children}</main>
+            <Footer />
+          </NextUIProvider>
+        </AuthProvider>
       </body>
     </html>
   );
