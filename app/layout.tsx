@@ -14,7 +14,7 @@ export default function RootLayout({
         <NextUIProvider>
           {/* Layout UI */}
           <Navtop />
-          <main>{children}</main>
+          <main className="min-h-[calc(100vh-435px)]">{children}</main>
           <Footer />
         </NextUIProvider>
       </body>

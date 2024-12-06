@@ -5,7 +5,7 @@ import {
   CatagorySection,
   ProductSaleGood,
   ProductForYou
-} from '@/components/page/Home'
+} from '../components/page/Home'
 
 const Home = () => {
   return (

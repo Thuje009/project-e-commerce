@@ -1,10 +1,16 @@
 'use client'
 import React, { useState } from 'react';
 import { Search, ShoppingCart, Menu, X, BellDot } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.push('/sign-in');
+  };
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -66,6 +72,7 @@ const Header = () => {
             >
               <span
                 className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${isSignIn ? 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+                onClick={handleNavigate}
               >
                 Sign IN
               </span>
