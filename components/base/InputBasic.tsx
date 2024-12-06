@@ -1,26 +1,24 @@
-'use client'
-import React from 'react';
+"use client"
+import React, { forwardRef } from 'react';
 
-interface InputBasicProps {
-  icon?: React.ReactNode;
-  name?: string;
-  type?: string;
+interface InputBasicProps extends React.InputHTMLAttributes<HTMLInputElement> {
   full?: boolean;
-  placeholder?: string
 }
 
-const InputBasic: React.FC<InputBasicProps> = ({ icon, name, type = 'text', full = false, placeholder = 'Enter Text' }) => {
-  return (
-    <div className={`relative ${full ? 'w-full' : 'w-auto'}`}>
-      {icon && <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">{icon}</span>}
+const InputBasic = forwardRef<HTMLInputElement, InputBasicProps>(
+  ({ full, ...props }, ref) => {
+    return (
       <input
-        className="py-2 px-4 border rounded-lg w-full outline-none"
-        type={type}
-        name={name}
-        placeholder={placeholder}
+        ref={ref}
+        className={`${
+          full ? 'w-full' : ''
+        } px-4 py-2 border rounded-lg focus:outline-none`}
+        {...props}
       />
-    </div>
-  );
-};
+    );
+  }
+);
+
+InputBasic.displayName = 'InputBasic';
 
 export default InputBasic;
