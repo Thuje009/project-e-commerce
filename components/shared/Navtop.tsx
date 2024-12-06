@@ -18,7 +18,7 @@ const Header = () => {
         {/* Desktop Navigation */}
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2" onClick={() => router.push('/')}>
             <h1 className="text-textPrimary font-bold text-2xl tracking-wide hover:text-buttonPrimary transition duration-300">
               Logo
             </h1>
