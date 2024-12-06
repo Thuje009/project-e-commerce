@@ -2,12 +2,16 @@
 import React, { useState } from 'react';
 import { Search, ShoppingCart, Menu, X, BellDot } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+
 
 const Header = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
 
+  console.log("🚀 ~ Header ~ session:", session)
   const handleNavigate = () => {
     router.push('/sign-in');
   };
@@ -66,22 +70,34 @@ const Header = () => {
             </button>
 
             {/* Sign In/Sign Up Button */}
-            <button
-              className="text-lg transition duration-200 font-bold border rounded-lg flex overflow-hidden"
-              onClick={() => setIsSignIn(!isSignIn)}
-            >
-              <span
-                className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${isSignIn ? 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
-                onClick={handleNavigate}
+            {session ? (
+              <div>
+                <span
+                  className={`py-2 px-2 transition-all duration-300 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent' border cursor-pointer`}
+                  onClick={() => router.push(`/user/accout`)}
+                >
+                  Profile
+                </span>
+              </div>
+            ) : (
+
+              <button
+                className="text-lg transition duration-200 font-bold border rounded-lg flex overflow-hidden"
+                onClick={() => setIsSignIn(!isSignIn)}
               >
-                Sign IN
-              </span>
-              <span
-                className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${!isSignIn ? 'bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
-              >
-                Sign Up
-              </span>
-            </button>
+                <span
+                  className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${isSignIn ? 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+                  onClick={handleNavigate}
+                >
+                  Sign IN
+                </span>
+                <span
+                  className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${!isSignIn ? 'bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+                >
+                  Sign Up
+                </span>
+              </button>
+            )}
           </div>
         </div>
 

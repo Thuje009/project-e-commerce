@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import InputBasic from "@/components/base/InputBasic";
 import Button from "../base/Button";
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { getSession, signIn } from 'next-auth/react';
 
 interface FormInputs {
   email: string;
@@ -13,6 +14,7 @@ interface FormInputs {
 
 const SignInPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const {
     control,
@@ -28,23 +30,34 @@ const SignInPage = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
-      const response = await signIn("credentials", {
+      const res = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
 
-      if (response?.error) {
-        setErrorMessage(response.error);
-      } else {
-        console.log("Login successful");
-        setErrorMessage("");
+      if (res?.error) {
+        setErrorMessage(res.error || "Something went wrong, please try again.");
+        return;
       }
+
+      console.log("Login successful:", res);
+
+      const session = await getSession();
+      console.log("Session data:", session);
+
+      if (session?.user) {
+        console.log("User details:", session.user);
+      }
+
+      setErrorMessage("");
+      router.push("/");
     } catch (error) {
-      console.error("Error during login:", error);
-      setErrorMessage("Something went wrong, please try again.");
+      console.error("Error during sign-in:", error);
+      setErrorMessage("Unable to sign in. Please try again.");
     }
   };
+
 
   return (
     <section className="flex flex-col gap-2 p-5">
