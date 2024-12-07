@@ -1,9 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RadioGroup, Radio, Input } from "@nextui-org/react";
+import { fetchUser } from '@/hook/fatchUser';
+import { TUser } from "@/util/type";
 
 function UserProfile() {
+  const [user, setUser] = useState<TUser>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await fetchUser();
+        setUser(userData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
   return (
     <div className="bg-card-background border-2 border-border rounded-lg p-4 text-foreground">
       {/* Head */}
@@ -20,7 +41,7 @@ function UserProfile() {
             </span>
             <div>
               <Input
-                label="ชื่อผู้ใช้"
+                label={user?.userName}
                 type="text"
                 className="text-text-primary bg-background"
               />
@@ -28,11 +49,16 @@ function UserProfile() {
           </div>
           <div className="flex pb-8 items-center">
             <span className="mr-4 w-32 flex justify-end text-text-secondary">
-              <p>ชื่อ</p>
+              <p>ชื่อ-นามสกุล</p>
             </span>
-            <div>
+            <div className="flex gap-4">
               <Input
-                label="ชื่อ"
+                label={user?.firstName}
+                type="text"
+                className="text-text-primary bg-background"
+              />
+              <Input
+                label={user?.lastName}
                 type="text"
                 className="text-text-primary bg-background"
               />
@@ -43,7 +69,7 @@ function UserProfile() {
               <p>อีเมล</p>
             </span>
             <div>
-              <p className="text-text-primary">User@example.com</p>
+              <p className="text-text-primary">{user?.email}</p>
             </div>
           </div>
           <div className="flex pb-8 items-center">
@@ -51,7 +77,7 @@ function UserProfile() {
               <p>หมายเลขโทรศัพท์</p>
             </span>
             <div>
-              <p className="text-text-primary">0123456</p>
+              <p className="text-text-primary">{user?.phoneNumber || 'ไม่ระบุ'}</p>
             </div>
           </div>
           <div className="flex pb-8 items-center">

@@ -1,8 +1,11 @@
 'use client'
-import React, { useState } from 'react';
-import { Search, ShoppingCart, Menu, X, BellDot } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Search, ShoppingCart, Menu, X, BellDot, ChevronDown, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
+import userPNG from "@/Image/user.png"
+import { fetchUser } from '@/hook/fatchUser';
+import { TUser } from '@/util/type';
 
 
 const Header = () => {
@@ -10,11 +13,50 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  console.log("🚀 ~ Header ~ session:", session)
+  //
+  const [user, setUser] = useState<TUser>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+
   const handleNavigate = () => {
     router.push('/sign-in');
   };
+  console.log("🚀 ~ Header ~ session:", session)
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpenDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await fetchUser();
+        setUser(userData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  console.log("🚀👀👀👀 ~ Header ~ user:", user)
+
+
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
@@ -71,13 +113,46 @@ const Header = () => {
 
             {/* Sign In/Sign Up Button */}
             {session ? (
-              <div>
-                <span
-                  className={`py-2 px-2 transition-all duration-300 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent' border cursor-pointer`}
-                  onClick={() => router.push(`/user/account`)}
+              <div className='relative' ref={dropdownRef}>
+                <div className='relative  w-11 h-11 rounded-full cursor-pointer ' onClick={() => setIsOpenDropdown((prev) => !prev)}
                 >
-                  Profile
-                </span>
+                  <img src={user?.profilePicture || userPNG.src} alt="" className=' w-11 h-11 rounded-full bg-cover ' />
+                  <ChevronDown size={15} className='absolute border rounded-full bg-slate-300 right-0 bottom-0' />
+                </div>
+
+                <div
+                  className={`absolute border bg-gray-100 rounded-md w-72 left-[-240px] top-14 p-2 flex flex-col gap-4 transition-all duration-300 ease-in-out 
+          ${isOpenDropdown ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
+        `}
+                >
+                  <div className=' bg-white rounded-md p-2 shadow-sm cursor-pointer transition-all duration-300 hover:bg-gray-100'
+                    onClick={() => {
+                      router.push('/user/account');
+                      setIsOpenDropdown(false);
+                    }}
+                  >
+                    <div className='flex items-center gap-4'>
+                      {/* <Image
+                        src={userPNG}
+                        alt=''
+                        className=' w-11 h-11 rounded-full '
+                      /> */}
+                      <img src={userPNG.src} alt="" className='w-11 h-11 rounded-full' />
+                      <span>
+                        <h1> {user?.userName} </h1>
+                      </span>
+                    </div>
+                  </div>
+                  <div className='flex items-center gap-2 rounded-md p-2 transition-all duration-300 hover:bg-gray-300 cursor-pointer'
+                    onClick={() => {
+                      signOut();
+                      setIsOpenDropdown(false);
+                    }}
+                  >
+                    <LogOut size={35} className='bg-gray-50 rounded-full border p-1' />
+                    <span>ออกจากระบบ</span>
+                  </div>
+                </div>
               </div>
             ) : (
 
@@ -140,22 +215,33 @@ const Header = () => {
               </button>
             </div>
 
-            {/* Mobile Sign In/Up Button */}
-            <button
-              className="text-lg transition duration-200 font-bold border rounded-lg flex overflow-hidden w-full"
-              onClick={() => setIsSignIn(!isSignIn)}
-            >
-              <span
-                className={`flex-1 py-2 px-4 text-center transition-all duration-300 rounded-br-3xl ${isSignIn ? 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+            {/* Mobile  Sign In/Up Button */}
+            {session ? (
+              <div>
+                <span
+                  className={`py-2 px-2 transition-all duration-300 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent' border cursor-pointer`}
+                  onClick={() => router.push(`/user/account`)}
+                >
+                  Profile
+                </span>
+              </div>
+            ) : (
+              <button
+                className="text-lg transition duration-200 font-bold border rounded-lg flex overflow-hidden w-full"
+                onClick={() => setIsSignIn(!isSignIn)}
               >
-                Sign IN
-              </span>
-              <span
-                className={`flex-1 py-2 px-4 text-center transition-all rounded-tl-3xl duration-300 ${!isSignIn ? 'bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
-              >
-                Sign Up
-              </span>
-            </button>
+                <span
+                  className={`flex-1 py-2 px-4 text-center transition-all duration-300 rounded-br-3xl ${isSignIn ? 'bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+                >
+                  Sign IN
+                </span>
+                <span
+                  className={`flex-1 py-2 px-4 text-center transition-all rounded-tl-3xl duration-300 ${!isSignIn ? 'bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white' : 'bg-transparent'}`}
+                >
+                  Sign Up
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </div>

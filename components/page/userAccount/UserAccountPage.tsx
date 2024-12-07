@@ -1,10 +1,15 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserProfile from "./UserProfile";
 import { Link, User } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import PurchasePage from "./Purchase";
 import { UserCircle, ShoppingBag, Bell, ChevronRight } from "lucide-react";
+import userPNG from "@/Image/user.png"
+import Image from "next/image";
+import { fetchUser } from '@/hook/fatchUser';
+import { TUser } from "@/util/type";
+
 
 interface Props {
   page: string;
@@ -12,6 +17,25 @@ interface Props {
 
 function UserAccountPage({ page }: Props) {
   const router = useRouter();
+  const [user, setUser] = useState<TUser>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await fetchUser();
+        setUser(userData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
 
   const menuItems = [
     {
@@ -41,20 +65,16 @@ function UserAccountPage({ page }: Props) {
               {/* Profile Section */}
               <div className="flex flex-col items-center pb-6 border-b border-gray-200">
                 <div className="w-24 h-24 relative mb-4">
-                  <img
-                    src="https://avatars.githubusercontent.com/u/30373425?v=4"
-                    alt="Profile"
-                    className="rounded-full object-cover w-full h-full ring-4 ring-gray-50"
-                  />
+                  <img src={user?.profilePicture || userPNG.src} alt="" />
                   <div className="absolute bottom-0 right-0 bg-green-500 w-4 h-4 rounded-full border-2 border-white"></div>
                 </div>
-                <h3 className="font-semibold text-lg">Junior Garcia</h3>
+                <span className="font-semibold text-lg">{user?.userName}</span>
                 <Link
                   href="#"
                   size="sm"
                   className="text-blue-600 hover:text-blue-700 transition-colors"
                 >
-                  @jrgarciadev
+                  {user?.email}
                 </Link>
               </div>
 
@@ -64,19 +84,17 @@ function UserAccountPage({ page }: Props) {
                   <button
                     key={item.route}
                     onClick={() => router.push(item.route)}
-                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${
-                      page === item.route
-                        ? "bg-buttonPrimary text-textPrimary"
-                        : "hover:bg-buttonPrimaryHover text-textPrimary"
-                    }`}
+                    className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${page === item.route
+                      ? "bg-buttonPrimary text-textPrimary"
+                      : "hover:bg-buttonPrimaryHover text-textPrimary"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
                       <span className="font-medium">{item.label}</span>
                     </div>
-                    <ChevronRight className={`w-5 h-5 ${
-                      page === item.route ? "text-textPrimary" : "text-gray-400"
-                    }`} />
+                    <ChevronRight className={`w-5 h-5 ${page === item.route ? "text-textPrimary" : "text-gray-400"
+                      }`} />
                   </button>
                 ))}
               </nav>
