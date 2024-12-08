@@ -1,19 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import InputBasic from "@/components/base/InputBasic";
 import Button from "../base/Button";
 import { useRouter } from "next/navigation";
 import { getSession, signIn } from 'next-auth/react';
+import ShoppingLoader from "../shared/Loading";
 
 interface FormInputs {
   email: string;
   password: string;
   dataPermission: boolean;
 }
-
 const SignInPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const {
@@ -27,6 +28,19 @@ const SignInPage = () => {
       dataPermission: true,
     },
   });
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getSession();
+      if (session?.user) {
+        router.push("/");
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
@@ -51,13 +65,14 @@ const SignInPage = () => {
       }
 
       setErrorMessage("");
-      router.push("/");
+      // router.back();
+      router.back();
+      window.location.reload();
     } catch (error) {
       console.error("Error during sign-in:", error);
       setErrorMessage("Unable to sign in. Please try again.");
     }
   };
-
 
   return (
     <section className="flex flex-col gap-2 p-5">

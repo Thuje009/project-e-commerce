@@ -82,7 +82,7 @@ const ShoppingLoader = () => {
 
         {/* Subtle Loading Progress */}
         <motion.div
-          className="mt-4 w-64 h-2 bg-gray-200 rounded-full overflow-hidden w-full"
+          className="mt-4 w-full h-2 bg-gray-200 rounded-full overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { delay: 0.5 } }}
         >
@@ -90,7 +90,7 @@ const ShoppingLoader = () => {
             className="h-full bg-gradient-to-r from-purple-500 to-pink-500"
             initial={{ width: 0 }}
             animate={{
-              width: ["20%", "30%", "50%", "70%","90%"],
+              width: ["20%", "30%", "50%", "70%", "95%"],
               transition: {
                 duration: 4,
                 ease: "easeInOut",
