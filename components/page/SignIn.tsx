@@ -67,7 +67,7 @@ const SignInPage = () => {
       setErrorMessage("");
       // router.back();
       router.back();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Error during sign-in:", error);
       setErrorMessage("Unable to sign in. Please try again.");
