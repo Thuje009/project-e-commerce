@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import CardSale from '@/components/shared/CardSale'
 import Title from '@/components/shared/Title'
@@ -10,9 +11,10 @@ type Props = {
     price: string;
     rating?: number;
   }[]
+  onClick?: () => void
 }
 
-const ProductSaleGood: React.FC<Props> = ({ dataProduct }) => {
+const ProductSaleGood: React.FC<Props> = ({ dataProduct, onClick }) => {
   return (
     <div className='flex flex-col gap-5'>
       <div className="flex justify-between items-center">
@@ -30,6 +32,7 @@ const ProductSaleGood: React.FC<Props> = ({ dataProduct }) => {
             price={item?.price}
             rating={item?.rating}
             key={index}
+            onClick={onClick}
           />
         ))}
       </div>

@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import {
   BannerPromotion,
   CatagorySection,
@@ -8,13 +9,14 @@ import {
 } from '../components/page/Home'
 
 const Home = () => {
+  const router = useRouter()
   return (
     <div className='flex flex-col gap-6 sm:container'>
       <div className='lg:px-4'>
         <BannerPromotion bannerSlides={dataBannerMock} />
       </div>
       <CatagorySection />
-      <ProductSaleGood dataProduct={mockProductData} />
+      <ProductSaleGood dataProduct={mockProductData} onClick={() => router.push(`/view-product/1`)} />
       <ProductForYou dataProduct={mockProductData} />
     </div>
   )
