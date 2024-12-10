@@ -41,7 +41,8 @@ function UserProfile() {
             </span>
             <div>
               <Input
-                label={user?.userName}
+                label="User name"
+                value={user?.userName}
                 type="text"
                 className="text-text-primary bg-background"
               />
@@ -53,12 +54,14 @@ function UserProfile() {
             </span>
             <div className="flex gap-4">
               <Input
-                label={user?.firstName}
+                label="ชื่อ"
+                value={user?.firstName}
                 type="text"
                 className="text-text-primary bg-background"
               />
               <Input
-                label={user?.lastName}
+                label= "นามสกุล"
+                value={user?.lastName}
                 type="text"
                 className="text-text-primary bg-background"
               />
