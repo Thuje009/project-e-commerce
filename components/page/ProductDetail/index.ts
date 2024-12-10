@@ -1,0 +1,6 @@
+export {default as MarkdownProduct} from './DescriptionProduct'
+export {default as TextTitle} from './TextTitle'
+export {default as ShopSection} from './ShopSection'
+export {default as ShopSame} from './ShopSame'
+export {default as RattingSection} from './RattingSection'
+export {default as ViewProductSection} from './ViewProductSection'

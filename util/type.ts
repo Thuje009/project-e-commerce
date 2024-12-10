@@ -10,3 +10,28 @@ export interface TUser {
   updatedAt: string; 
   phoneNumber:string;  
 }
+
+export type TColorProduct = {
+  title: string
+  colorProduct: {
+    name: string
+    image: string
+  }[]
+}
+
+export type TSizeProduct = {
+  title: string
+  sizeProduct: {
+    name?: string
+    size: string
+  }[]
+}
+
+export type TTitleProduct = { 
+  nameProduc: string
+  price: number
+  rating: number
+  limitPoduct?: number | 0
+}
+
+
