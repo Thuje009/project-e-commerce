@@ -12,7 +12,7 @@ type Props = {
     date: string;
     nameProduct: string;
     comment: string;
-    imgComment: string;
+    imgComment: string[]; // ปรับให้รองรับ array
   }[];
 };
 
@@ -20,7 +20,6 @@ const RattingSection: React.FC<Props> = ({ dataRatindProduct }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [mounted, setMounted] = useState(false);
 
-  // ใช้ useEffect เพื่อโหลดหน้าจาก localStorage หลังจาก mount
   useEffect(() => {
     const savedPage = localStorage.getItem('currentPage');
     if (savedPage) {
@@ -46,15 +45,14 @@ const RattingSection: React.FC<Props> = ({ dataRatindProduct }) => {
 
   const totalPages = Math.ceil(dataRatindProduct.length / itemsPerPage);
 
-  // ฟังก์ชันเปลี่ยนหน้า
   const paginate = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
 
-  // ถ้ายังไม่ mount ให้ return null เพื่อหลีกเลี่ยง hydration error
   if (!mounted) return null;
+
   return (
     <div className="border p-4 shadow-sm flex flex-col gap-4">
       <Title title="คะแนนของสินค้า" />
@@ -83,19 +81,21 @@ const RattingSection: React.FC<Props> = ({ dataRatindProduct }) => {
 
           <div className="mt-2">{review.comment}</div>
 
-          {review.imgComment && (
-            <div className="mt-2">
-              <img
-                src={review.imgComment}
-                alt="Comment Image"
-                className="w-24 h-24 object-cover rounded-lg"
-              />
+          {review.imgComment && review.imgComment.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {review.imgComment.map((img, imgIndex) => (
+                <img
+                  key={imgIndex}
+                  src={img}
+                  alt={`Comment Image ${imgIndex + 1}`}
+                  className="w-20 h-20 object-cover rounded-lg"
+                />
+              ))}
             </div>
           )}
         </div>
       ))}
 
-      {/* ส่วนของ Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

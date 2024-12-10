@@ -229,7 +229,17 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150",
+
+    ]
   },
   {
     userName: "user2",
@@ -238,7 +248,10 @@ const MockRatingPro = [
     date: "2023-04-03 09:15",
     nameProduct: "สมาร์ทโฟนรุ่นใหม่",
     comment: "ผลิตภัณฑ์ดีเยี่ยมมาก คุ้มค่า",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_1",
@@ -247,7 +260,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_1",
@@ -256,7 +272,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_1",
@@ -265,7 +284,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_5",
@@ -274,7 +296,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "user6",
@@ -283,7 +308,10 @@ const MockRatingPro = [
     date: "2023-04-03 09:15",
     nameProduct: "สมาร์ทโฟนรุ่นใหม่",
     comment: "ผลิตภัณฑ์ดีเยี่ยมมาก คุ้มค่า",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_7",
@@ -292,7 +320,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_8",
@@ -301,7 +332,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
   {
     userName: "grizzlybear_9",
@@ -310,7 +344,10 @@ const MockRatingPro = [
     date: "2023-04-02 08:31",
     nameProduct: "ปากกิลูกลื่น",
     comment: "สินค้าดี ส่งมาถูกหวัน ไว้จะมาซื้อใหม่ครับ",
-    imgComment: "https://via.placeholder.com/150"
+    imgComment: [
+      "https://via.placeholder.com/150",
+      "https://via.placeholder.com/150"
+    ]
   },
 ];
 
