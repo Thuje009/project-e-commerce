@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const mockNotifications = {
   promotions: [
@@ -8,6 +9,7 @@ const mockNotifications = {
       details: "รับส่วนลด 50% สำหรับสินค้าทุกชิ้นในหมวดหมู่วันนี้เท่านั้น!",
       date: "2024-12-10",
       imageUrl: "https://via.placeholder.com/150?text=50%+OFF",
+      url: "/promotions",
     },
     {
       id: 2,
@@ -15,6 +17,7 @@ const mockNotifications = {
       details: "สินค้าใหม่ล่าสุดในคอลเลกชันฤดูร้อน พร้อมให้คุณช้อปแล้ววันนี้",
       date: "2024-12-08",
       imageUrl: "https://via.placeholder.com/150?text=New+Arrivals",
+      url: "/promotions",
     },
     {
       id: 3,
@@ -22,6 +25,7 @@ const mockNotifications = {
       details: "รับโค้ดส่วนลด 100 บาท เมื่อช้อปครบ 500 บาทขึ้นไป",
       date: "2024-12-07",
       imageUrl: "https://via.placeholder.com/150?text=Discount+Code",
+      url: "/promotions",
     },
   ],
   orders: [
@@ -31,6 +35,7 @@ const mockNotifications = {
       details: "คำสั่งซื้อ #12345 ของคุณกำลังถูกจัดส่ง โปรดรอรับสินค้า",
       date: "2024-12-09",
       imageUrl: "https://via.placeholder.com/150?text=Shipped",
+      url: "/promotions",
     },
     {
       id: 2,
@@ -39,6 +44,7 @@ const mockNotifications = {
         "คำสั่งซื้อ #12344 ของคุณได้จัดส่งสำเร็จแล้ว ขอบคุณที่ช้อปกับเรา!",
       date: "2024-12-08",
       imageUrl: "https://via.placeholder.com/150?text=Delivered",
+      url: "/promotions",
     },
     {
       id: 3,
@@ -46,11 +52,13 @@ const mockNotifications = {
       details: "คำสั่งซื้อ #12346 ของคุณได้รับการยืนยันแล้ว กำลังเตรียมสินค้า",
       date: "2024-12-07",
       imageUrl: "https://via.placeholder.com/150?text=Confirmed",
+      url: "/promotions",
     },
   ],
 };
 
 const Notification = ({ subPage }: { subPage?: string }) => {
+  const router = useRouter();
   const notifications =
     subPage === "notification/promotions"
       ? mockNotifications.promotions
@@ -69,7 +77,7 @@ const Notification = ({ subPage }: { subPage?: string }) => {
           key={notification.id}
           // style={{ borderBottom: "1px solid #ddd", padding: "10px 0" }}
           className="flex border-b-2 py-4 px-4 cursor-pointer hover:bg-gray-200"
-          onClick={() => false}
+          onClick={() => router.push(`${notification.url}`)}
         >
           <div className="mr-4">
             <img

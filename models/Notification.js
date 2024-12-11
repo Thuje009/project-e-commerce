@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { string } = require("yup");
 
 // Define the schema for a notification
 const notificationSchema = new mongoose.Schema(
@@ -10,6 +11,10 @@ const notificationSchema = new mongoose.Schema(
     details: {
       type: String,
       required: true,
+    },
+    url: {
+      type: String,
+      default: "",
     },
     category: {
       type: String,

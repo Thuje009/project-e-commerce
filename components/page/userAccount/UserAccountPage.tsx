@@ -7,7 +7,7 @@ import useSWR from "swr";
 
 import UserProfile from "./UserProfile";
 import PurchasePage from "./Purchase";
-import Notification from "./Notification";
+import Notification from "./notification/Notification";
 
 import {
   UserCircle,
