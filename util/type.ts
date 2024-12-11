@@ -16,7 +16,7 @@ export type TColorProduct = {
   colorProduct: {
     name: string
     image: string
-  }[]
+  }[] 
 }
 
 export type TSizeProduct = {
@@ -35,10 +35,24 @@ export type TTitleProduct = {
 }
 export interface IProduct extends Document {
   image: string[];
-  ProductName: string;
-  price: string;
+  productName: string; 
+  price: number;
   rating: number;
   category: string;
   stock: number;
-  _id?: string; 
+  storeId: string;
+  colorProduct: {
+    title: string;
+    options: { 
+      name: string;
+      image: string;
+    }[]; 
+  };
+  sizeProduct: {
+    title: string;
+    options: { 
+      name: string;
+      size: string;
+    }[];
+  };
 }

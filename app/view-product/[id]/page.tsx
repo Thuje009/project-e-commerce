@@ -1,39 +1,104 @@
 import React from 'react';
 import { TextTitle, ShopSection, ShopSame, RattingSection, MarkdownProduct, ViewProductSection } from '@/components/page/ProductDetail';
-import { TColorProduct, TSizeProduct, TTitleProduct } from '@/util/type';
+import { TColorProduct, TSizeProduct, TTitleProduct, IProduct } from '@/util/type';
 import { ProductForYou } from '@/components/page/Home';
+import { getProductData, getShop } from '@/app/server/getProductData.action';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: {
     id: string;
   };
-}
-
-const ViewProduct: React.FC<Props> = ({ params }) => {
-  const { id } = params;
-
-  return (
-    <div className="flex flex-col py-8 sm:container gap-4">
-      <div className=" mx-auto grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 p-4 shadow-sm border">
-        <ViewProductSection ImageProduct={mockImageProduct} />
-        <TextTitle
-          titleProduct={MockTitle}
-          colorProduct={MockcolorProduct}
-          sizeProduct={MocksizeProduct}
-        />
-      </div>
-      <ShopSection imgShop={dataShop?.imgShop} nameShop={dataShop?.nameShop} />
-      <MarkdownProduct content={MockMuckDown} />
-      <div className='grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4'>
-        <RattingSection dataRatindProduct={MockRatingPro} />
-        <ShopSame dataProduct={mockProductData} />
-      </div>
-      <ProductForYou dataProduct={mockProductData} />
-    </div>
-  );
 };
 
-export default ViewProduct;
+export async function generateMetadata({ params }: Props) {
+  try {
+    const product = await getProductData(params.id);
+
+    if (!product) {
+      return {
+        title: 'Product Not Found',
+      };
+    }
+
+    const shopData = await getShop(product?.storeId);
+
+    if (!shopData) {
+      return { title: "Shop Not Found" };
+    }
+
+    return {
+      title: product.productName,
+      description: shopData.shopName,
+    };
+  } catch (error) {
+    return {
+      title: 'Product Not Found'
+    };
+  }
+}
+
+export default async function ViewProduct({ params }: Props) {
+
+  try {
+    const product = await getProductData(params.id);
+
+    if (!product) {
+      throw new Error('Product not found');
+    }
+
+    const shopData = await getShop(product.storeId);
+    console.log("👀👀🏪 ~ ViewProduct ~ shopData:", shopData)
+
+    if (!shopData) {
+      throw new Error('Shop not found');
+    }
+
+    //Pack data titleProduct
+    const packdata = {
+      nameProduc: product?.productName,
+      price: product?.price,
+      rating: product?.rating,
+      limitPoduct: product?.stock
+    }
+
+    //Pack data colorProduct
+    const packdataColor = {
+      title: product?.colorProduct?.title || '',
+      colorProduct: product?.colorProduct?.options || []
+    }
+
+    //Pack data sizeProduct
+    const packdataSize = {
+      title: product?.sizeProduct?.title || '',
+      sizeProduct: product?.sizeProduct?.options || []
+    }
+
+    return (
+      <div className="flex flex-col py-8 sm:container gap-4">
+        <div className=" mx-auto grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 p-4 shadow-sm border">
+          <ViewProductSection ImageProduct={product?.image} />
+          <TextTitle
+            titleProduct={packdata}
+            colorProduct={packdataColor}
+            sizeProduct={packdataSize}
+          />
+        </div>
+        <ShopSection imgShop={shopData?.imgShop} nameShop={shopData?.nameShop} />
+        <MarkdownProduct content={MockMuckDown} />
+        <div className='grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4'>
+          <RattingSection dataRatindProduct={MockRatingPro} />
+          <ShopSame dataProduct={mockProductData} />
+        </div>
+        <ProductForYou dataProduct={mockProductData} />
+      </div>
+    );
+  } catch (error) {
+    notFound();
+  }
+
+};
+
 
 
 const mockProductData = [

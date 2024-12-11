@@ -1,6 +1,4 @@
-'use client';
-import { darkLayout } from '@nextui-org/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type Props = {
   title: string;
@@ -11,11 +9,18 @@ type Props = {
 };
 
 const SizeProduct: React.FC<Props> = ({ dataText, title }) => {
-  const [selectedSize, setSelectedSize] = useState<string>(`${dataText[0]?.size}`);
+
+  const [selectedSize, setSelectedSize] = useState<string>(dataText.length > 0 ? dataText[0].size : '');
 
   const handleSelectSize = (size: string) => {
     setSelectedSize(size);
   };
+
+  useEffect(() => {
+    if (dataText.length > 0 && !selectedSize) {
+      setSelectedSize(dataText[0].size);
+    }
+  }, [dataText, selectedSize]);
 
   return (
     <div className="flex gap-4 p-4">

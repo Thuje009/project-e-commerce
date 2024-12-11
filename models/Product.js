@@ -31,8 +31,8 @@ const productSchema = new mongoose.Schema({
   },
   storeId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Shop", // เชื่อมโยงกับ Store model
-    required: true, // กำหนดให้ต้องมีข้อมูล
+    ref: "Shop", 
+    required: true, 
   },
   colorProduct: {
     title: { type: String },
@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
         image: String,
       }
     ],
-    default: [], // ค่าเริ่มต้นเป็น array ว่าง
+    // default: [], 
   },
   sizeProduct: {
     title: { type: String },
@@ -52,11 +52,12 @@ const productSchema = new mongoose.Schema({
         size: String,
       }
     ],
-    default: [], // ค่าเริ่มต้นเป็น array ว่าง
+    // default: [], 
   },
 }, { timestamps: true });
 
 // สร้าง Model ของ Product
 const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
+
 
 module.exports = Product;

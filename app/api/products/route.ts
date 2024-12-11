@@ -45,13 +45,13 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log(body.image);
 
-        // ตรวจสอบว่า image เป็น array และเป็น array ของ string ที่ถูกต้อง
-     const images = Array.isArray(body.image) ? body.image.map((img: string) => img.trim()) : [];
+const images = Array.isArray(body.image) ? body.image.filter((img: string) => img.trim() !== "") : [];
+
 
     // สร้างสินค้าใหม่
     const product = new Product({
-      ProductName: body.ProductName,
-       image: images,
+      productName: body.productName,
+      image: images,
       price: body.price,
       rating: body.rating,
       category: body.category,

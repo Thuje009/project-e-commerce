@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { atom, useAtom } from 'jotai';
 
@@ -20,6 +20,13 @@ const ImageDetail: React.FC<Props> = ({ imageProduct, oClick }) => {
   const thumbnailsToShow = 4;
 
   const mainImageRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    if (!selectedImage && imageProduct.length > 0) {
+      setSelectedImage(imageProduct[0]);
+    }
+  }, [imageProduct, selectedImage, setSelectedImage]);
 
   if (!selectedImage) {
     setSelectedImage(imageProduct[0]);
@@ -50,13 +57,15 @@ const ImageDetail: React.FC<Props> = ({ imageProduct, oClick }) => {
     setIsHovering(true);
   }, []);
 
+
+
   return (
     <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 relative">
       {/* Main Image Container */}
       <div className="flex flex-col items-center space-y-4 p-4">
         <div
           ref={mainImageRef}
-          className="relative w-full flex items-center justify-center border-2 border-gray-200 rounded-lg overflow-hidden cursor-zoom-in"
+          className="relative w-[372px] h-[372px] flex items-center justify-center border-2 border-gray-200 rounded-lg overflow-hidden cursor-zoom-in"
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
