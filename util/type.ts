@@ -33,5 +33,12 @@ export type TTitleProduct = {
   rating: number
   limitPoduct?: number | 0
 }
-
-
+export interface IProduct extends Document {
+  image: string[];
+  ProductName: string;
+  price: string;
+  rating: number;
+  category: string;
+  stock: number;
+  _id?: string; 
+}

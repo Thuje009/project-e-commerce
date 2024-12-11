@@ -3,7 +3,7 @@ import React from 'react';
 import Rating from './Rating';
 
 type Props = {
-  image: string;
+  image: string[];
   ProductName: string;
   price: string;
   rating?: number;
@@ -14,7 +14,7 @@ const CardSale: React.FC<Props> = ({ image, ProductName, price, rating = 0, onCl
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-200 max-w-sm w-full mx-auto flex flex-col justify-between " onClick={onClick}>
-      <img src={image} alt={ProductName} className="w-full h-52 object-cover rounded-t-md" />
+      <img src={image[0]} alt={ProductName} className="w-full h-52 object-cover rounded-t-md" />
       <div className='py-4'>
         <div className="flex-grow p-2">
           <h2 className="text-xl font-semibold text-gray-800">{ProductName}</h2>

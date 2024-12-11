@@ -1,28 +1,31 @@
-'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import {
   BannerPromotion,
   CatagorySection,
   ProductSaleGood,
   ProductForYou
 } from '../components/page/Home'
+import { FatchProductServerComponent } from '@/hook/fatchProduct';
 
-const Home = () => {
-  const router = useRouter()
+
+
+export default async function Home() {
+
+  const { products } = await FatchProductServerComponent();
+
+  console.log("🚀 ~ Home ~ products:", products)
   return (
     <div className='flex flex-col gap-6 sm:container'>
       <div className='lg:px-4'>
         <BannerPromotion bannerSlides={dataBannerMock} />
       </div>
       <CatagorySection />
-      <ProductSaleGood dataProduct={mockProductData} onClick={() => router.push(`/view-product/1`)} />
+      <ProductSaleGood initialProducts={products} />
       <ProductForYou dataProduct={mockProductData} />
     </div>
   )
 }
 
-export default Home
 
 const dataBannerMock = [
   'https://www.shutterstock.com/image-vector/brush-sale-banner-promotion-ribbon-260nw-1182942766.jpg',
