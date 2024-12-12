@@ -19,6 +19,7 @@ import {
 import userPNG from "@/Image/user.png";
 import { fetchUser } from "@/hook/fatchUser";
 import { TUser } from "@/util/type";
+import { useSession } from "next-auth/react";
 
 interface Props {
   initialPage: string; // Initial page to display
@@ -55,6 +56,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       onClick(route);
     }
   };
+
 
   return (
     <div>
@@ -101,6 +103,7 @@ const UserAccountPage: React.FC<Props> = ({ initialPage }) => {
   const router = useRouter();
   const { data: user, error, isLoading } = useSWR("/api/auth/me", fetchUser);
 
+  const {data:session,status} = useSession()
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const menuItems = useMemo(
@@ -148,6 +151,10 @@ const UserAccountPage: React.FC<Props> = ({ initialPage }) => {
 
   if (!validPages.includes(currentPage)) {
     return <div>404 Not Found</div>;
+  }
+
+  if(status === "unauthenticated"){
+    router.push("/sign-in")
   }
 
   return (

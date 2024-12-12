@@ -1,101 +1,160 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  getNotification,
+  markNotificationAsRead,
+} from "@/app/server/notifications/notification.action";
+import { getSession } from "next-auth/react";
 
-const mockNotifications = {
-  promotions: [
-    {
-      id: 1,
-      title: "ส่วนลดพิเศษ 50%",
-      details: "รับส่วนลด 50% สำหรับสินค้าทุกชิ้นในหมวดหมู่วันนี้เท่านั้น!",
-      date: "2024-12-10",
-      imageUrl: "https://via.placeholder.com/150?text=50%+OFF",
-      url: "/promotions",
-    },
-    {
-      id: 2,
-      title: "สินค้าใหม่เข้าแล้ว",
-      details: "สินค้าใหม่ล่าสุดในคอลเลกชันฤดูร้อน พร้อมให้คุณช้อปแล้ววันนี้",
-      date: "2024-12-08",
-      imageUrl: "https://via.placeholder.com/150?text=New+Arrivals",
-      url: "/promotions",
-    },
-    {
-      id: 3,
-      title: "แจกโค้ดส่วนลด",
-      details: "รับโค้ดส่วนลด 100 บาท เมื่อช้อปครบ 500 บาทขึ้นไป",
-      date: "2024-12-07",
-      imageUrl: "https://via.placeholder.com/150?text=Discount+Code",
-      url: "/promotions",
-    },
-  ],
-  orders: [
-    {
-      id: 1,
-      title: "สินค้ากำลังจัดส่ง",
-      details: "คำสั่งซื้อ #12345 ของคุณกำลังถูกจัดส่ง โปรดรอรับสินค้า",
-      date: "2024-12-09",
-      imageUrl: "https://via.placeholder.com/150?text=Shipped",
-      url: "/promotions",
-    },
-    {
-      id: 2,
-      title: "คำสั่งซื้อสำเร็จ",
-      details:
-        "คำสั่งซื้อ #12344 ของคุณได้จัดส่งสำเร็จแล้ว ขอบคุณที่ช้อปกับเรา!",
-      date: "2024-12-08",
-      imageUrl: "https://via.placeholder.com/150?text=Delivered",
-      url: "/promotions",
-    },
-    {
-      id: 3,
-      title: "ยืนยันคำสั่งซื้อ",
-      details: "คำสั่งซื้อ #12346 ของคุณได้รับการยืนยันแล้ว กำลังเตรียมสินค้า",
-      date: "2024-12-07",
-      imageUrl: "https://via.placeholder.com/150?text=Confirmed",
-      url: "/promotions",
-    },
-  ],
-};
+interface Notification {
+  _id: string;
+  title: string;
+  details: string;
+  imageUrl: string;
+  url: string;
+  createdAt: string;
+  expiresAt: string;
+  category: string;
+  readBy?: string[]; // Added to track read notifications
+  userId?: string;
+}
 
 const Notification = ({ subPage }: { subPage?: string }) => {
   const router = useRouter();
-  const notifications =
+  const [notifications, setNotifications] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [user, setUser] = useState<any>(null);
+
+  const currentDate = new Date();
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const [session, response] = await Promise.all([
+          getSession(),
+          getNotification(),
+        ]);
+
+        if (!session?.user) {
+          setError("คุณไม่ได้เข้าสู่ระบบ");
+          return;
+        }
+
+        setUser(session.user);
+
+        if (response.success) {
+          setNotifications(response.data);
+        } else {
+          setError(response.message || "Unable to fetch notifications.");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching notifications.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  // console.log(user)
+
+  const handleNotificationClick = async (id: string, url: string) => {
+    if (!user) return "no user";
+
+    // console.log(id)
+
+    try {
+      // Mark notification as read on the server
+      const res = await markNotificationAsRead({ notificationId: id });
+      console.log(res.success)
+
+      // Update local state to reflect read status
+      setNotifications((prev: any) =>
+        prev.map((noti: any) =>
+          noti._id === id
+            ? { ...noti, readBy: [...(noti.readBy || []), user.id] }
+            : noti
+        )
+      );
+      
+
+      // Navigate to the notification URL
+      router.push(url);
+    } catch (error) {
+      console.error("Error marking notification as read", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  const filteredNotifications = notifications.filter(
+    (notification: Notification) => {
+      const expiresAt = new Date(notification.expiresAt);
+      return expiresAt >= currentDate;
+    }
+  );
+
+  const subPageNotifications =
     subPage === "notification/promotions"
-      ? mockNotifications.promotions
+      ? filteredNotifications.filter(
+          (noti: Notification) => noti.category === "Promotions"
+        )
       : subPage === "notification/orders"
-      ? mockNotifications.orders
+      ? filteredNotifications.filter(
+          (noti: Notification) =>
+            noti.category === "Orders" && noti.userId === user?.id
+        )
       : null;
 
-  if (!notifications) {
-    return <div>กรุณาเลือกหมวดหมู่การแจ้งเตือน</div>;
+  if (!subPageNotifications || subPageNotifications.length === 0) {
+    return <div>ไม่มีการแจ้งเตือนในหมวดหมู่นี้</div>;
   }
 
   return (
     <>
-      {notifications.map((notification) => (
+      {subPageNotifications.map((notification: Notification) => (
         <div
-          key={notification.id}
-          // style={{ borderBottom: "1px solid #ddd", padding: "10px 0" }}
-          className="flex border-b-2 py-4 px-4 cursor-pointer hover:bg-gray-200"
-          onClick={() => router.push(`${notification.url}`)}
+          key={notification._id}
+          className={`flex border-b-2 py-4 px-4 cursor-pointer ${
+            notification.readBy?.includes(user?.id)
+              ? "bg-white"
+              : "bg-orange-200"
+          } hover:bg-gray-200`}
+          onClick={() =>
+            handleNotificationClick(notification._id, notification.url)
+          }
         >
           <div className="mr-4">
             <img
               src={notification.imageUrl}
               alt={notification.title}
-              // style={{
-              //   width: "150px",
-              //   height: "150px",
-              //   objectFit: "cover",
-              //   marginBottom: "10px",
-              // }}
               className="w-16 h-16 mb-4 object-cover"
             />
           </div>
           <div>
             <h2 className="text-lg">{notification.title}</h2>
             <p className="text-base">{notification.details}</p>
-            <small className="text-sm">{notification.date}</small>
+            <small className="text-sm">
+              {new Date(notification.createdAt).toLocaleString("default", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </small>
           </div>
         </div>
       ))}
