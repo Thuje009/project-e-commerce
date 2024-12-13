@@ -5,7 +5,7 @@ import {
   ProductSaleGood,
   ProductForYou
 } from '../components/page/Home'
-import { FatchProductServerComponent } from '@/hook/fatchProduct';
+import { FatchProductServerComponent } from '@/hooks/fatchProduct';
 
 
 

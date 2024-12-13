@@ -12,8 +12,9 @@ import {
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import userPNG from "@/Image/user.png";
-import { fetchUser } from "@/hook/fatchUser";
+import { fetchUser } from "@/hooks/fatchUser";
 import { TUser } from "@/util/type";
+import NotificationDropdown from "./Notification";
 
 const Header = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -48,7 +49,10 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpenDropdown(false);
       }
     };
@@ -63,7 +67,13 @@ const Header = () => {
     router.push(path);
   };
 
-  const DropdownItem = ({ label, onClick }: { label: string; onClick: () => void }) => (
+  const DropdownItem = ({
+    label,
+    onClick,
+  }: {
+    label: string;
+    onClick: () => void;
+  }) => (
     <div
       className={`
         flex items-center gap-3 p-2.5 rounded-lg 
@@ -74,9 +84,9 @@ const Header = () => {
       onClick={onClick}
     >
       {label === "Log Out" && (
-        <LogOut 
-          size={24} 
-          className="text-red-500 group-hover:scale-110 transition-transform" 
+        <LogOut
+          size={24}
+          className="text-red-500 group-hover:scale-110 transition-transform"
         />
       )}
       {label === user?.userName && (
@@ -86,12 +96,14 @@ const Header = () => {
           className="w-10 h-10 rounded-full border-2 border-gray-300 object-cover"
         />
       )}
-      <span className="font-medium group-hover:text-primary transition-colors">{label}</span>
+      <span className="font-medium group-hover:text-primary transition-colors">
+        {label}
+      </span>
     </div>
   );
 
   return (
-    <header 
+    <header
       className="
         w-full bg-white shadow-md sticky top-0 z-50 
         transition-shadow duration-300 
@@ -108,7 +120,7 @@ const Header = () => {
             "
             onClick={() => handleNavigate("/")}
           >
-            <h1 
+            <h1
               className="
                 text-gray-800 font-bold text-2xl 
                 tracking-wider hover:text-blue-600 
@@ -117,7 +129,7 @@ const Header = () => {
             >
               Logo
             </h1>
-            <div 
+            <div
               className="
                 w-9 h-9 rounded-full bg-gradient-to-br 
                 from-green-400 to-green-600 
@@ -155,28 +167,28 @@ const Header = () => {
                   transition-all duration-300
                 "
               />
-              <Search 
+              <Search
                 className="
                   absolute left-3 top-3 
                   text-gray-400 
                   transition-colors 
                   group-focus-within:text-blue-500
-                " 
-                size={20} 
+                "
+                size={20}
               />
             </div>
 
-            <button 
+            <button
               className="
                 p-2 hover:bg-gray-100 rounded-full 
                 relative group transition-all
               "
             >
-              <ShoppingCart 
-                size={24} 
-                className="group-hover:scale-110 transition-transform" 
+              <ShoppingCart
+                size={24}
+                className="group-hover:scale-110 transition-transform"
               />
-              <span 
+              <span
                 className="
                   absolute -top-1.5 -right-1.5 
                   bg-red-500 text-white text-xs 
@@ -189,28 +201,7 @@ const Header = () => {
               </span>
             </button>
 
-            <button 
-              className="
-                p-2 hover:bg-gray-100 rounded-full 
-                relative group transition-all
-              "
-            >
-              <BellDot 
-                size={24} 
-                className="group-hover:scale-110 transition-transform" 
-              />
-              <span 
-                className="
-                  absolute -top-1.5 -right-1.5 
-                  bg-red-500 text-white text-xs 
-                  rounded-lg w-5 h-5 
-                  flex items-center justify-center 
-                  group-hover:animate-pulse
-                "
-              >
-                0
-              </span>
-            </button>
+            {status === "authenticated" && <NotificationDropdown />}
 
             {status === "authenticated" && !loading ? (
               <div className="relative" ref={dropdownRef}>
@@ -242,7 +233,7 @@ const Header = () => {
                 </div>
 
                 {isOpenDropdown && (
-                  <div 
+                  <div
                     className="
                       absolute border bg-white rounded-xl 
                       w-72 left-[-240px] top-14 
@@ -253,7 +244,10 @@ const Header = () => {
                   >
                     <DropdownItem
                       label={user?.userName || "User"}
-                      onClick={() => handleNavigate("/user/account")}
+                      onClick={() => {
+                        handleNavigate("/user/account"),
+                          setIsOpenDropdown(false);
+                      }}
                     />
                     <div className="border-t my-1"></div>
                     <DropdownItem

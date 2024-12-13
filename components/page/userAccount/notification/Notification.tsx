@@ -1,91 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import {
-  getNotification,
-  markNotificationAsRead,
-} from "@/app/server/notifications/notification.action";
-import { getSession } from "next-auth/react";
-
-interface Notification {
-  _id: string;
-  title: string;
-  details: string;
-  imageUrl: string;
-  url: string;
-  createdAt: string;
-  expiresAt: string;
-  category: string;
-  readBy?: string[]; // Added to track read notifications
-  userId?: string;
-}
+import React from "react";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useNotificationActions } from "@/hooks/useNotificationActions";
+import { useSession } from "next-auth/react";
 
 const Notification = ({ subPage }: { subPage?: string }) => {
-  const router = useRouter();
-  const [notifications, setNotifications] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [user, setUser] = useState<any>(null);
+  const { data: session } = useSession();
+  const { notifications, isLoading, error, setNotifications } =
+    useNotifications();
+
+  const { handleNotificationClick } = useNotificationActions(
+    session?.user,
+    setNotifications
+  );
 
   const currentDate = new Date();
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const [session, response] = await Promise.all([
-          getSession(),
-          getNotification(),
-        ]);
-
-        if (!session?.user) {
-          setError("คุณไม่ได้เข้าสู่ระบบ");
-          return;
-        }
-
-        setUser(session.user);
-
-        if (response.success) {
-          setNotifications(response.data);
-        } else {
-          setError(response.message || "Unable to fetch notifications.");
-        }
-      } catch (err) {
-        setError("An error occurred while fetching notifications.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchNotifications();
-  }, []);
-
-  // console.log(user)
-
-  const handleNotificationClick = async (id: string, url: string) => {
-    if (!user) return "no user";
-
-    // console.log(id)
-
-    try {
-      // Mark notification as read on the server
-      const res = await markNotificationAsRead({ notificationId: id });
-      console.log(res.success)
-
-      // Update local state to reflect read status
-      setNotifications((prev: any) =>
-        prev.map((noti: any) =>
-          noti._id === id
-            ? { ...noti, readBy: [...(noti.readBy || []), user.id] }
-            : noti
-        )
-      );
-      
-
-      // Navigate to the notification URL
-      router.push(url);
-    } catch (error) {
-      console.error("Error marking notification as read", error);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -100,21 +28,17 @@ const Notification = ({ subPage }: { subPage?: string }) => {
   }
 
   const filteredNotifications = notifications.filter(
-    (notification: Notification) => {
-      const expiresAt = new Date(notification.expiresAt);
-      return expiresAt >= currentDate;
-    }
+    (notification: any) => new Date(notification.expiresAt) >= currentDate
   );
 
   const subPageNotifications =
     subPage === "notification/promotions"
       ? filteredNotifications.filter(
-          (noti: Notification) => noti.category === "Promotions"
+          (noti: any) => noti.category === "Promotions"
         )
       : subPage === "notification/orders"
       ? filteredNotifications.filter(
-          (noti: Notification) =>
-            noti.category === "Orders" && noti.userId === user?.id
+          (noti: any) => noti.category === "Orders" && noti.userId === session?.user?.id
         )
       : null;
 
@@ -124,11 +48,11 @@ const Notification = ({ subPage }: { subPage?: string }) => {
 
   return (
     <>
-      {subPageNotifications.map((notification: Notification) => (
+      {subPageNotifications.map((notification: any) => (
         <div
           key={notification._id}
           className={`flex border-b-2 py-4 px-4 cursor-pointer ${
-            notification.readBy?.includes(user?.id)
+            notification.readBy?.includes(session?.user?.id)
               ? "bg-white"
               : "bg-orange-200"
           } hover:bg-gray-200`}

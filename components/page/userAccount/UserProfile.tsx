@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { RadioGroup, Radio, Input } from "@nextui-org/react";
-import { fetchUser } from '@/hook/fatchUser';
+import { fetchUser } from '@/hooks/fatchUser';
 import { TUser } from "@/util/type";
 
 function UserProfile() {

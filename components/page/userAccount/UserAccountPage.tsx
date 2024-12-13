@@ -17,7 +17,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import userPNG from "@/Image/user.png";
-import { fetchUser } from "@/hook/fatchUser";
+import { fetchUser } from "@/hooks/fatchUser";
 import { TUser } from "@/util/type";
 import { useSession } from "next-auth/react";
 
