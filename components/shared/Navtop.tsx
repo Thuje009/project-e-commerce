@@ -12,8 +12,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import userPNG from "@/Image/user.png";
-import { fetchUser } from "@/hooks/fatchUser";
 import { TUser } from "@/util/type";
+import { fetchUserData } from "@/app/server/getUser.action";
+
+
+
 import NotificationDropdown from "./Notification";
 
 const Header = () => {
@@ -31,7 +34,7 @@ const Header = () => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userData = await fetchUser();
+        const userData = await fetchUserData();
         setUser(userData);
       } catch (err: any) {
         setError(err.message);
@@ -266,21 +269,19 @@ const Header = () => {
                 onClick={() => setIsSignIn(!isSignIn)}
               >
                 <span
-                  className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${
-                    isSignIn
-                      ? "bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
-                      : "bg-transparent"
-                  }`}
+                  className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${isSignIn
+                    ? "bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
+                    : "bg-transparent"
+                    }`}
                   onClick={() => handleNavigate("/sign-in")}
                 >
                   Sign IN
                 </span>
                 <span
-                  className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${
-                    !isSignIn
-                      ? "bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
-                      : "bg-transparent"
-                  }`}
+                  className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${!isSignIn
+                    ? "bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
+                    : "bg-transparent"
+                    }`}
                 >
                   Sign Up
                 </span>

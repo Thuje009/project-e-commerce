@@ -33,26 +33,55 @@ export type TTitleProduct = {
   rating: number
   limitPoduct?: number | 0
 }
-export interface IProduct extends Document {
-  image: string[];
-  productName: string; 
-  price: number;
-  rating: number;
-  category: string;
-  stock: number;
-  storeId: string;
-  colorProduct: {
-    title: string;
-    options: { 
-      name: string;
-      image: string;
-    }[]; 
-  };
-  sizeProduct: {
-    title: string;
-    options: { 
-      name: string;
-      size: string;
-    }[];
-  };
+export interface IProduct {
+   _id: string;
+   productName: string;
+   detailProduct: string;
+   price: number;
+   rating: number;
+   stock: number;
+   category: string;
+   image: string[];
+   storeId: {
+     [x: string]: string;
+     _id: string;
+     shopName: string;
+     location: string;
+     imgShop: string;
+     description: string;
+   };
+   colorProduct?: {
+     title: string;
+     options: { name: string; image: string }[];
+   };
+   sizeProduct?: {
+     title: string;
+     options: { name: string; size: string }[];
+   }; 
+}
+
+export interface IReview {
+
+   _id: string;
+   productId: string;
+   userId?: {
+     _id: string;
+     userName: string;
+     email: string;
+     profilePicture: string;
+   } | null;
+   rating: number;
+   comment: string;
+   date:string
+  nameProduct?: string;
+   createdAt: Date; 
+   imgComment?: string[];
+}
+
+export interface IShop {
+   _id: string;
+   nameShop: string;
+   location: string;
+   description: string;
+   imgShop: string;
 }

@@ -33,12 +33,10 @@ const ColorProduct: React.FC<Props> = ({ dataColor, title }) => {
       <div className="flex gap-4">
         <span className="font-bold">{title}</span>
         <div className='flex flex-col'>
-          {dataColor?.length && (
             <div className="flex  gap-2 ">
               <span className="text-gray-500">Selected: </span>
               <span className="font-semibold text-blue-500">{selectedColor || 'None'}</span>
             </div>
-          )}
           <div className={`flex flex-wrap gap-4 mt-4  ${dataColor.length > 36 ? 'h-40' : 'h-fit'} overflow-hidden overflow-y-auto`}>
             {dataColor.map((item, index) => (
               <div

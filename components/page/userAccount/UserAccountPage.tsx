@@ -17,9 +17,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import userPNG from "@/Image/user.png";
-import { fetchUser } from "@/hooks/fatchUser";
-import { TUser } from "@/util/type";
-import { useSession } from "next-auth/react";
+import { fetchUserData } from "@/app/server/getUser.action";
 
 interface Props {
   initialPage: string; // Initial page to display
@@ -62,11 +60,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
     <div>
       <button
         onClick={handleMenuClick}
-        className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${
-          activePage.startsWith(route)
-            ? "bg-buttonPrimary text-textPrimary"
-            : "hover:bg-buttonPrimaryHover text-textPrimary"
-        }`}
+        className={`w-full flex items-center justify-between p-3 rounded-xl transition-all duration-200 ${activePage.startsWith(route)
+          ? "bg-buttonPrimary text-textPrimary"
+          : "hover:bg-buttonPrimaryHover text-textPrimary"
+          }`}
       >
         <div className="flex items-center gap-3">
           {icon}
@@ -88,9 +85,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
           <button
             key={subItem.route}
             onClick={() => onClick(`${route}/${subItem.route}`)}
-            className={`w-full flex items-center pl-10 py-2 text-left text-sm hover:bg-gray-100 ${
-              activePage === `${route}/${subItem.route}` ? "bg-gray-200 font-medium" : ""
-            }`}
+            className={`w-full flex items-center pl-10 py-2 text-left text-sm hover:bg-gray-100 ${activePage === `${route}/${subItem.route}` ? "bg-gray-200 font-medium" : ""
+              }`}
           >
             {subItem.label}
           </button>
@@ -101,7 +97,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
 const UserAccountPage: React.FC<Props> = ({ initialPage }) => {
   const router = useRouter();
-  const { data: user, error, isLoading } = useSWR("/api/auth/me", fetchUser);
+  const { data: user, error, isLoading } = useSWR("/api/auth/me", fetchUserData);
 
   const {data:session,status} = useSession()
   const [currentPage, setCurrentPage] = useState(initialPage);

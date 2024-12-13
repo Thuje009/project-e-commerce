@@ -6,8 +6,6 @@ import ColorProduct from '@/components/shared/ColorProduct';
 import SizeProduct from '@/components/shared/SizeProduct';
 import { TColorProduct, TSizeProduct, TTitleProduct } from '@/util/type';
 import { Minus, Plus } from 'lucide-react';
-import { useAtom } from 'jotai';
-
 
 type Props = {
   titleProduct: TTitleProduct;
@@ -63,10 +61,11 @@ const TextTitle: React.FC<Props> = ({ titleProduct, onClick, colorProduct, sizeP
       </div>
 
       {/* Color Selection */}
-      <div>
-        <ColorProduct dataColor={colorProduct?.colorProduct} title={colorProduct?.title} />
-      </div>
-
+      {colorProduct?.title && (
+        <div>
+          <ColorProduct dataColor={colorProduct?.colorProduct} title={colorProduct?.title} />
+        </div>
+      )}
       {/* Size Selection */}
       <div>
         <SizeProduct title={sizeProduct?.title} dataText={sizeProduct?.sizeProduct} />

@@ -67,7 +67,7 @@ const ProductSaleGood: React.FC<Props> = ({ initialProducts }) => {
           <CardSale
             ProductName={item?.productName || 'ไม่ระบุชื่อสินค้า'}
             image={item?.image ? [item.image[0]] : []}
-            price={item?.price || '0'}
+            price={item?.price || 0}
             rating={item?.rating || 0}
             key={item?._id}
             onClick={() => handleNext(item?._id)}

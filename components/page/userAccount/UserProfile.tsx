@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { RadioGroup, Radio, Input } from "@nextui-org/react";
-import { fetchUser } from '@/hooks/fatchUser';
 import { TUser } from "@/util/type";
+import { fetchUserData } from "@/app/server/getUser.action";
 
 function UserProfile() {
   const [user, setUser] = useState<TUser>();
@@ -13,7 +13,7 @@ function UserProfile() {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userData = await fetchUser();
+        const userData = await fetchUserData();
         setUser(userData);
       } catch (err: any) {
         setError(err.message);
@@ -60,7 +60,7 @@ function UserProfile() {
                 className="text-text-primary bg-background"
               />
               <Input
-                label= "นามสกุล"
+                label="นามสกุล"
                 value={user?.lastName}
                 type="text"
                 className="text-text-primary bg-background"

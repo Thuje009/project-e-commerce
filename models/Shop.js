@@ -4,27 +4,27 @@ const mongoose = require("mongoose");
 const shopSchema = new mongoose.Schema({
   imgShop: {
     type: String,
-    required: true, // รูปของร้านค้า
+    required: true, 
   },
   nameShop: {
     type: String,
-    required: true, // ชื่อร้านค้า
+    required: true, 
   },
   description: {
     type: String,
-    required: false, // คำอธิบายร้าน (ไม่จำเป็น)
+    required: false, 
   },
   location: {
     type: String,
-    required: false, // ที่ตั้งร้าน (ไม่จำเป็น)
+    required: false, 
   },
   createdAt: {
     type: Date,
-    default: Date.now, // วันที่สร้างร้าน
+    default: Date.now, 
   },
   updatedAt: {
     type: Date,
-    default: Date.now, // วันที่อัปเดตร้านล่าสุด
+    default: Date.now, 
   },
 });
 
