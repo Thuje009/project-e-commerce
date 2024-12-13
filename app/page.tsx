@@ -1,29 +1,34 @@
-import React from 'react'
+import React from 'react';
 import {
   BannerPromotion,
   CatagorySection,
   ProductSaleGood,
-  ProductForYou
-} from '../components/page/Home'
-import { FatchProductServerComponent } from '@/hook/fatchProduct';
-
-
+  ProductForYou,
+} from '../components/page/Home';
+import { getProducts } from './server/getProductDetail.action';
+import { notFound } from 'next/navigation';
 
 export default async function Home() {
+  try {
+    const products = await getProducts();
+    if (!products || products.length === 0) {
+      return notFound();
+    }
 
-  const { products } = await FatchProductServerComponent();
-
-  console.log("🚀 ~ Home ~ products:", products)
-  return (
-    <div className='flex flex-col gap-6 sm:container'>
-      <div className='lg:px-4'>
-        <BannerPromotion bannerSlides={dataBannerMock} />
+    return (
+      <div className="flex flex-col gap-6 sm:container">
+        <div className="lg:px-4">
+          <BannerPromotion bannerSlides={dataBannerMock} />
+        </div>
+        <CatagorySection />
+        <ProductSaleGood initialProducts={products} />
+        <ProductForYou dataProduct={products} />
       </div>
-      <CatagorySection />
-      <ProductSaleGood initialProducts={products} />
-      <ProductForYou dataProduct={mockProductData} />
-    </div>
-  )
+    );
+  } catch (error: any) {
+    console.error('Error in Home page:', error.message);
+    return notFound();
+  }
 }
 
 

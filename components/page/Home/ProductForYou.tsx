@@ -3,17 +3,15 @@ import React, { useState } from 'react'
 import CardSale from '@/components/shared/CardSale'
 import Title from '@/components/shared/Title'
 import { ChevronDown } from 'lucide-react'
+import { IProduct } from '@/util/type'
+import { useRouter } from 'next/navigation'
 
 type Props = {
-  dataProduct: {
-    image: string;
-    ProductName: string;
-    price: string;
-    rating?: number;
-  }[]
+  dataProduct: IProduct[]
 }
 
 const ProductForYou: React.FC<Props> = ({ dataProduct }) => {
+  const router = useRouter()
   const itemsPerPage = 20;
   const [visibleItems, setVisibleItems] = useState(itemsPerPage);
 
@@ -23,21 +21,33 @@ const ProductForYou: React.FC<Props> = ({ dataProduct }) => {
     setVisibleItems(prev => Math.min(prev + itemsPerPage, dataProduct.length));
   };
 
+  const handleProduct = (id: any) => {
+    if (id && /^[0-9a-fA-F]{24}$/.test(id) || id > 3) {
+      router.push(`/view-product/${id}`);
+    } else {
+      console.log('👀👀👀', id)
+    }
+  };
+
   return (
     <div className='flex flex-col gap-5'>
       <div className="flex justify-between items-center">
         <Title title='สินค้าสำหรับคุณ' />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {dataProduct.slice(0, visibleItems).map((item, index) => (
-          <CardSale
-            ProductName={item?.ProductName}
-            image={item?.image}
-            price={item?.price}
-            rating={item?.rating}
-            key={index}
-          />
-        ))}
+        {dataProduct.slice(0, visibleItems).map((item, index) => {
+          console.log(item?._id);
+          return (
+            <CardSale
+              ProductName={item?.productName}
+              image={item?.image}
+              price={item?.price}
+              rating={item?.rating}
+              key={index}
+              onClick={() => handleProduct(item?._id)}
+            />
+          );
+        })}
       </div>
 
       {/* Load More Button */}

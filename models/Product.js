@@ -14,15 +14,19 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true, 
   },
+  detailProduct:{
+    type: String,
+    require: true
+  },
   rating: {
     type: Number,
     required: true,
-    min: 0, // ตั้งค่าต่ำสุด
-    max: 5, // ตั้งค่าสูงสุด
+    min: 0, 
+    max: 5, 
   },
   category: {
     type: String,
-    required: true, // กำหนดให้ต้องมีข้อมูล
+    required: true, 
   },
   stock: {
     type: Number,
@@ -56,8 +60,20 @@ const productSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+// Virtual field สำหรับ reviews
+productSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "productId",
+});
+
+// เปิดใช้งาน virtual fields
+productSchema.set("toObject", { virtuals: true });
+productSchema.set("toJSON", { virtuals: true });
+
 // สร้าง Model ของ Product
 const Product = mongoose.models.Product || mongoose.model("Product", productSchema);
 
 
 module.exports = Product;
+

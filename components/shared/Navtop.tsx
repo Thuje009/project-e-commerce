@@ -12,8 +12,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import userPNG from "@/Image/user.png";
-import { fetchUser } from "@/hook/fatchUser";
 import { TUser } from "@/util/type";
+import { fetchUserData } from "@/app/server/getUser.action";
+
+
+
 
 const Header = () => {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -30,7 +33,7 @@ const Header = () => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const userData = await fetchUser();
+        const userData = await fetchUserData();
         setUser(userData);
       } catch (err: any) {
         setError(err.message);
@@ -74,9 +77,9 @@ const Header = () => {
       onClick={onClick}
     >
       {label === "Log Out" && (
-        <LogOut 
-          size={24} 
-          className="text-red-500 group-hover:scale-110 transition-transform" 
+        <LogOut
+          size={24}
+          className="text-red-500 group-hover:scale-110 transition-transform"
         />
       )}
       {label === user?.userName && (
@@ -91,7 +94,7 @@ const Header = () => {
   );
 
   return (
-    <header 
+    <header
       className="
         w-full bg-white shadow-md sticky top-0 z-50 
         transition-shadow duration-300 
@@ -108,7 +111,7 @@ const Header = () => {
             "
             onClick={() => handleNavigate("/")}
           >
-            <h1 
+            <h1
               className="
                 text-gray-800 font-bold text-2xl 
                 tracking-wider hover:text-blue-600 
@@ -117,7 +120,7 @@ const Header = () => {
             >
               Logo
             </h1>
-            <div 
+            <div
               className="
                 w-9 h-9 rounded-full bg-gradient-to-br 
                 from-green-400 to-green-600 
@@ -155,28 +158,28 @@ const Header = () => {
                   transition-all duration-300
                 "
               />
-              <Search 
+              <Search
                 className="
                   absolute left-3 top-3 
                   text-gray-400 
                   transition-colors 
                   group-focus-within:text-blue-500
-                " 
-                size={20} 
+                "
+                size={20}
               />
             </div>
 
-            <button 
+            <button
               className="
                 p-2 hover:bg-gray-100 rounded-full 
                 relative group transition-all
               "
             >
-              <ShoppingCart 
-                size={24} 
-                className="group-hover:scale-110 transition-transform" 
+              <ShoppingCart
+                size={24}
+                className="group-hover:scale-110 transition-transform"
               />
-              <span 
+              <span
                 className="
                   absolute -top-1.5 -right-1.5 
                   bg-red-500 text-white text-xs 
@@ -189,17 +192,17 @@ const Header = () => {
               </span>
             </button>
 
-            <button 
+            <button
               className="
                 p-2 hover:bg-gray-100 rounded-full 
                 relative group transition-all
               "
             >
-              <BellDot 
-                size={24} 
-                className="group-hover:scale-110 transition-transform" 
+              <BellDot
+                size={24}
+                className="group-hover:scale-110 transition-transform"
               />
-              <span 
+              <span
                 className="
                   absolute -top-1.5 -right-1.5 
                   bg-red-500 text-white text-xs 
@@ -242,7 +245,7 @@ const Header = () => {
                 </div>
 
                 {isOpenDropdown && (
-                  <div 
+                  <div
                     className="
                       absolute border bg-white rounded-xl 
                       w-72 left-[-240px] top-14 
@@ -272,21 +275,19 @@ const Header = () => {
                 onClick={() => setIsSignIn(!isSignIn)}
               >
                 <span
-                  className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${
-                    isSignIn
-                      ? "bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
-                      : "bg-transparent"
-                  }`}
+                  className={`py-2 px-2 transition-all duration-300 rounded-br-3xl ${isSignIn
+                    ? "bg-gradient-to-b from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
+                    : "bg-transparent"
+                    }`}
                   onClick={() => handleNavigate("/sign-in")}
                 >
                   Sign IN
                 </span>
                 <span
-                  className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${
-                    !isSignIn
-                      ? "bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
-                      : "bg-transparent"
-                  }`}
+                  className={`py-2 px-2 transition-all rounded-tl-3xl duration-300 ${!isSignIn
+                    ? "bg-gradient-to-t from-[var(--button-primary)] to-[var(--button-primary-hover)] text-white"
+                    : "bg-transparent"
+                    }`}
                 >
                   Sign Up
                 </span>

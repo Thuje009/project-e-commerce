@@ -39,7 +39,7 @@ const BannerPromotion: React.FC<Props> = ({ bannerSlides }) => {
   }, [currentIndex, bannerSlides.length])
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index + bannerSlides.length) // ไปที่ชุดกลางเสมอ
+    setCurrentIndex(index + bannerSlides.length)
   }
 
   const goToPrevious = () => {

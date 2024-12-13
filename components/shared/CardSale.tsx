@@ -5,7 +5,7 @@ import Rating from './Rating';
 type Props = {
   image: string[];
   ProductName: string;
-  price: string;
+  price: number;
   rating?: number;
   onClick?: () => void
 };

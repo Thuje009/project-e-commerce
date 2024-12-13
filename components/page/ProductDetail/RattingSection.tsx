@@ -3,20 +3,15 @@ import React, { useEffect, useState } from 'react';
 import Rating from '@/components/shared/Rating';
 import Title from '@/components/shared/Title';
 import Pagination from '@/components/shared/Pagination';
+import UserPNG from '@/Image/user.png'
+import { IReview } from '@/util/type';
 
 type Props = {
-  dataRatindProduct: {
-    userName: string;
-    imgUser: string;
-    rating: number;
-    date: string;
-    nameProduct: string;
-    comment: string;
-    imgComment: string[]; // ปรับให้รองรับ array
-  }[];
+  dataRatindProduct: IReview[]
 };
 
 const RattingSection: React.FC<Props> = ({ dataRatindProduct }) => {
+
   const [currentPage, setCurrentPage] = useState(1);
   const [mounted, setMounted] = useState(false);
 
@@ -61,12 +56,12 @@ const RattingSection: React.FC<Props> = ({ dataRatindProduct }) => {
         <div key={index} className="mb-4 border-b-1 pb-4">
           <div className="flex items-center gap-3">
             <img
-              src={review.imgUser}
-              alt={review.userName}
+              src={review?.userId?.profilePicture || UserPNG.src}
+              alt={review?.userId?.userName}
               className="w-10 h-10 rounded-full"
             />
             <div>
-              <div className="font-semibold">{review.userName}</div>
+              <div className="font-semibold">{review?.userId?.userName}</div>
               <div className="text-sm text-gray-500">{review.date}</div>
             </div>
           </div>
