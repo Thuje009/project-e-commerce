@@ -7,11 +7,14 @@ import {
 } from '../components/page/Home';
 import { getProducts } from './server/getProductDetail.action';
 import { notFound } from 'next/navigation';
+import { getCategory } from './server/getCategory.action';
 
 export default async function Home() {
   try {
     const products = await getProducts();
-    if (!products || products.length === 0) {
+    const category = await getCategory()
+
+    if (!products || products.length === 0 || !category || category.length === 0) {
       return notFound();
     }
 
@@ -20,7 +23,7 @@ export default async function Home() {
         <div className="lg:px-4">
           <BannerPromotion bannerSlides={dataBannerMock} />
         </div>
-        <CatagorySection />
+        <CatagorySection categories={category} />
         <ProductSaleGood initialProducts={products} />
         <ProductForYou dataProduct={products} />
       </div>

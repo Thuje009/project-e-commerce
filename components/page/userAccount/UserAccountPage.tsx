@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import userPNG from "@/Image/user.png";
 import { fetchUserData } from "@/app/server/getUser.action";
+import { useSession } from "next-auth/react";
 
 interface Props {
   initialPage: string; // Initial page to display
@@ -99,7 +100,7 @@ const UserAccountPage: React.FC<Props> = ({ initialPage }) => {
   const router = useRouter();
   const { data: user, error, isLoading } = useSWR("/api/auth/me", fetchUserData);
 
-  const {data:session,status} = useSession()
+  const { data: session, status } = useSession()
   const [currentPage, setCurrentPage] = useState(initialPage);
 
   const menuItems = useMemo(
@@ -149,7 +150,7 @@ const UserAccountPage: React.FC<Props> = ({ initialPage }) => {
     return <div>404 Not Found</div>;
   }
 
-  if(status === "unauthenticated"){
+  if (status === "unauthenticated") {
     router.push("/sign-in")
   }
 

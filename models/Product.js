@@ -6,6 +6,7 @@ const productSchema = new mongoose.Schema({
   image: [
     {type:String}
   ],
+  
   productName: {
     type: String,
     required: true, 
@@ -24,14 +25,15 @@ const productSchema = new mongoose.Schema({
     min: 0, 
     max: 5, 
   },
-  category: {
-    type: String,
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Categories",
     required: true, 
   },
   stock: {
     type: Number,
     required: true,
-    min: 0, // ตั้งค่าต่ำสุด
+    min: 0, 
   },
   storeId: {
     type: mongoose.Schema.Types.ObjectId,

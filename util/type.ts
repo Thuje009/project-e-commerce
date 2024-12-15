@@ -41,6 +41,7 @@ export interface IProduct {
    rating: number;
    stock: number;
    category: string;
+   categoryName:string;
    image: string[];
    storeId: {
      [x: string]: string;
@@ -84,4 +85,11 @@ export interface IShop {
    location: string;
    description: string;
    imgShop: string;
+}
+
+export interface ICategory {
+   [x: string]: any;
+   catagoryName:string
+   image:string
+   categoryId:string
 }

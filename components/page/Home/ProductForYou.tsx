@@ -22,11 +22,7 @@ const ProductForYou: React.FC<Props> = ({ dataProduct }) => {
   };
 
   const handleProduct = (id: any) => {
-    if (id && /^[0-9a-fA-F]{24}$/.test(id) || id > 3) {
-      router.push(`/view-product/${id}`);
-    } else {
-      console.log('👀👀👀', id)
-    }
+    router.push(`/view-product/${id}`);
   };
 
   return (

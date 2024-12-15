@@ -23,8 +23,12 @@ const ImageDetail: React.FC<Props> = ({ imageProduct, oClick }) => {
 
 
   useEffect(() => {
-    if (!selectedImage && imageProduct.length > 0) {
-      setSelectedImage(imageProduct[0]);
+    if (imageProduct.length > 0) {
+      const isCurrentImageStillValid = selectedImage && imageProduct.includes(selectedImage);
+
+      if (!isCurrentImageStillValid) {
+        setSelectedImage(imageProduct[0]);
+      }
     }
   }, [imageProduct, selectedImage, setSelectedImage]);
 

@@ -3,7 +3,6 @@ import { TextTitle, ShopSection, ShopSame, RattingSection, MarkdownProduct, View
 import { ProductForYou } from '@/components/page/Home';
 import { getProductData, getProducts } from '@/app/server/getProductDetail.action';
 import { notFound } from 'next/navigation';
-import mongoose from 'mongoose';
 
 type Props = {
   params: {
