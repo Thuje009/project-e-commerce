@@ -1,46 +1,89 @@
 import React from 'react';
-import {
-  BannerPromotion,
-  CatagorySection,
-  ProductSaleGood,
-  ProductForYou,
-} from '../components/page/Home';
-import { getProducts } from './server/getProductDetail.action';
+import { TextTitle, ShopSection, ShopSame, RattingSection, MarkdownProduct, ViewProductSection } from '@/components/page/ProductDetail';
+import { ProductForYou } from '@/components/page/Home';
+import { getProductData, getProducts } from '@/app/server/getProductDetail.action';
 import { notFound } from 'next/navigation';
-import { getCategory } from './server/getCategory.action';
 
-export default async function Home() {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export async function generateMetadata({ params }: Props) {
   try {
-    const products = await getProducts();
-    const category = await getCategory()
+    const product = await getProductData(params.id);
 
-    if (!products || products.length === 0 || !category || category.length === 0) {
-      return notFound();
+    if (!product) {
+      return {
+        title: 'Product Not Found',
+        description: 'The requested product could not be found'
+      };
     }
 
-    return (
-      <div className="flex flex-col gap-6 sm:container">
-        <div className="lg:px-4">
-          <BannerPromotion bannerSlides={dataBannerMock} />
-        </div>
-        <CatagorySection categories={category} />
-        <ProductSaleGood initialProducts={products} />
-        <ProductForYou dataProduct={products} />
-      </div>
-    );
-  } catch (error: any) {
-    console.error('Error in Home page:', error.message);
-    return notFound();
+    return {
+      title: product.productName,
+      description: product.detailProduct.slice(0, 160)
+    };
+  } catch (error) {
+    return {
+      title: 'Product Not Found',
+      description: 'Error loading product details'
+    };
   }
 }
 
+export default async function ViewProduct({ params }: Props) {
 
-const dataBannerMock = [
-  'https://www.shutterstock.com/image-vector/brush-sale-banner-promotion-ribbon-260nw-1182942766.jpg',
-  'https://adsterra.com/blog/wp-content/uploads/2021/06/how-banners-make-you-money.png',
-  'https://adsterra.com/blog/wp-content/uploads/2021/06/how-banners-make-you-money.png',
+  const product = await getProductData(params.id);
+  const productForyou = await getProducts();
+  if (!product || !productForyou) {
+    notFound();
+  }
 
-]
+  // Pack data titleProduct
+  const packdata = {
+    nameProduc: product.productName,
+    price: product.price,
+    rating: product.rating,
+    limitPoduct: product.stock
+  };
+
+  // Pack data colorProduct
+  const packdataColor = {
+    title: product.colorProduct?.title || '',
+    colorProduct: product.colorProduct?.options || []
+  };
+
+  // Pack data sizeProduct
+  const packdataSize = {
+    title: product.sizeProduct?.title || '',
+    sizeProduct: product.sizeProduct?.options || [],
+  };
+
+  return (
+    <div className="flex flex-col py-8 sm:container gap-4">
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 p-4 shadow-sm border">
+        <ViewProductSection ImageProduct={product.image} />
+        <TextTitle
+          titleProduct={packdata}
+          colorProduct={packdataColor}
+          sizeProduct={packdataSize}
+        />
+      </div>
+      <ShopSection
+        imgShop={product.shop?.imgShop || ''}
+        nameShop={product.shop?.nameShop || ''}
+      />
+      <MarkdownProduct content={product.detailProduct} />
+      <div className='grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-4'>
+        <RattingSection dataRatindProduct={product.reviews} />
+        <ShopSame dataProduct={mockProductData} />
+      </div>
+      <ProductForYou dataProduct={productForyou} />
+    </div>
+  );
+}
 
 
 const mockProductData = [
@@ -226,3 +269,8 @@ const mockProductData = [
   },
 
 ];
+
+
+
+
+
